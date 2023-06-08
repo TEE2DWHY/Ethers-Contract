@@ -24,7 +24,7 @@ const main = async () => {
     const contract = await contractFactory.deploy(deploymentOptions);
     // const transactionReceipt = await contract.waitForDeployment(1); //pause the execution of your code (for one block confirmation) until the contract deployment is confirmed on the network
     console.log(contract.deploymentTransaction()); // output contract transaction response
-    // console.log(`This is the receipt of a transaction: ${transactionReceipt}`); //this is the receipt of a transaction, obtained by waiting for a block.
+    // console.log(transactionReceipt); //this is the receipt of a transaction, obtained by waiting for a block.
     console.log(contract);
 
     // const nonce = await wallet.getNonce() // we are getting the nonce automatically;

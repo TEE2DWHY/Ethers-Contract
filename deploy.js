@@ -3,7 +3,7 @@ const fs = require("fs");
 
 const main = async () => {
   try {
-    const provider = new ethers.JsonRpcProvider("http://172.20.10.4:7545");
+    const provider = new ethers.JsonRpcProvider("http://172.20.10.4:7545"); // connect to our genache instance.
     const wallet = new ethers.Wallet(
       "0x9d9bba38a0987d344ea25aad11773b2118c922b508d27a39a86d4d9229cb165d",
       provider
@@ -19,14 +19,21 @@ const main = async () => {
     const deploymentOptions = {
       gasLimit: 2000000, // Set your desired gas limit
     };
-    const contractFactory = new ethers.ContractFactory(abi, binary, wallet);
-    console.log("Contract is being deployed... Please wait");
+    const contractFactory = new ethers.ContractFactory(abi, binary, wallet); // connect to a new contract factory instance with our wallet.
+    // console.log("Contract is being deployed... Please wait");
     const contract = await contractFactory.deploy(deploymentOptions);
-    // const transactionReceipt = await contract.waitForDeployment(1); //pause the execution of your code (for one block confirmation) until the contract deployment is confirmed on the network
-    console.log(contract.deploymentTransaction()); // output contract transaction response
-    // console.log(transactionReceipt); //this is the receipt of a transaction, obtained by waiting for a block.
-    console.log(contract);
+    await contract.waitForDeployment(1); //pause the execution of your code (for one block confirmation) until the contract deployment is confirmed on the network
+    //console.log(contract.deploymentTransaction()); // output contract transaction response
+    //console.log(transactionReceipt); //this is the receipt of a transaction, obtained by waiting for a block.
+    //console.log(contract);
+    //CALL CONTRACT FUNCTIONS
+    const transacitonResponse = await contract.newAge("7"); // a contract comes with all the functionality via the abi (application binary interface)
+    await transacitonResponse.wait(1); // ensure the transaction is successful by ensuring a block is formed
+    console.log(transacitonResponse);
+    const newAge = await contract.retrieve();
+    console.log(newAge.toString());
 
+    // CREATING AN ETH RAW TRANSACTION
     // const nonce = await wallet.getNonce() // we are getting the nonce automatically;
     // const tx = { // we're creating a transaction
     //   nonce: nonce,

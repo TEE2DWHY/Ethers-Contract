@@ -10,13 +10,17 @@ const main = async () => {
   const deploymentOptions = {
     gasLimit: 2000000, // Set your desired gas limit
   };
-  const contractFactory = new ethers.ContractFactory(abi, binary, wallet);
+  const contractFactory = new ethers.ContractFactory(abi, binary, wallet); 
   console.log("Contract is being deployed... Please wait");
   const contract = await contractFactory.deploy(deploymentOptions);
-  console.log(contract); 
+  const transactionReceipt = await contract.waitForDeployment(1); //pause the execution of your code (for one block confirmation) until the contract deployment is confirmed on the network
+  console.log(`This is the transaction used to deploy a contract: ${contract.deploymentTransaction}`)
+  console.log(`This is the reciept of a transaction: ${transactionReceipt}`) //this is the reciept of a transaction, gotten by waiting for a block.
+  // process.exit(0)
   }
   catch(err){
     console.log(err.message)
+    // process.exit(1)
   }
 
 };

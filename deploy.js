@@ -5,7 +5,13 @@ require("dotenv").config();
 const main = async () => {
   try {
     const provider = new ethers.JsonRpcProvider(process.env.RPC_URL); // connect to our genache instance.
-    const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+    // const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+    const encryptedJson = fs.readFileSync("./encryptedJsonKey.json", "utf8");
+    let wallet = await ethers.Wallet.fromEncryptedJson(
+      encryptedJson,
+      process.env.PRIVATE_KEY_PASSWORD
+    );
+    wallet = wallet.connect(provider);
     const abi = fs.readFileSync(
       "./SimpleStorage_sol_SimpleStorage.abi",
       "utf8"
@@ -14,10 +20,11 @@ const main = async () => {
       "./SimpleStorage_sol_SimpleStorage.bin",
       "utf8"
     );
-    const deploymentOptions = {
-      gasLimit: 2000000, // Set your desired gas limit
-    };
     const contractFactory = new ethers.ContractFactory(abi, binary, wallet); // connect to a new contract factory instance with our wallet.
+    const gasLimit = 200000;
+    const deploymentOptions = {
+      gasLimit: gasLimit, // Set your desired gas limit
+    };
     const contract = await contractFactory.deploy(deploymentOptions);
     const transactionReciept = await contract.waitForDeployment(1); //pause the execution of your code (for one block confirmation) until the contract deployment is confirmed on the network
     //console.log(contract.deploymentTransaction()); // output contract transaction response

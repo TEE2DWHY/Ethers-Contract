@@ -25,6 +25,8 @@ contract SimpleStorage {
     function add() public pure returns (uint256) {
         return (1 + 1);
     }
+    
+    //created contract on goerli(testnet) and verified contract : 0xa4F1A9fB1A218E7B567a24089cD52e3e7a2BC6C5 (source: https://goerli.etherscan.io/address/0xa4F1A9fB1A218E7B567a24089cD52e3e7a2BC6C5#code)
 
     function addPerson(string memory _name, uint256 _favouriteNumber) public {
         person.push(People(_name, _favouriteNumber));
